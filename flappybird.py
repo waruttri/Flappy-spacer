@@ -119,12 +119,16 @@ class Game: # The Game
             if event.type==pygame.KEYDOWN:
                if event.key==pygame.K_RETURN:
                   wait=0
-         self.msg("Gameover",dw-150,dh-100,red,40)
-         self.msg("Press Enter to Play Again",dw-545,dh+200,red,40)
+         self.msg("Game Over",dw-250,dh-100,red,40)
+            if(self.score>int(highest_score)):
+                highest_score = self.score
+                record_score()
+         self.msg("Press Enter to Play Again",dw-450,dh+200,white,30)
          pygame.display.flip()
       self.new()# Setting Up New Game
    def scores(self):
-         self.msg("Score:"+str(self.score),dw-130,200,green,30)
+         self.msg("Your Score: "+str(self.score),0,dh-450,green,30)
+         self.msg("High Score: {}".format(highest_score),dw+120,dh-450,white,28)
       
    def update(self):#During Game Play
      self.all_sprites.update()
@@ -289,6 +293,28 @@ def spacer():
     pygame.display.update()
     pygame.time.delay(1000)
 
+def read_score():
+        current_path = pathlib.Path().absolute()
+        score_path = "{}\{}".format(current_path,"score.txt")
+        if pathlib.Path(score_path).is_file():
+            f = open(score_path, "r")
+            score = (f.readline())
+            f.close() 
+        else:
+            file = open("score.txt", "w") 
+            file.write("0") 
+            file.close() 
+            score = 0  
+        return score
+
+def record_score():
+    current_path = pathlib.Path().absolute()
+    score_path = "{}\{}".format(current_path,"score.txt")
+    if pathlib.Path(score_path).is_file():
+        f = open(score_path, "w")
+        f.write(str(highest_score))
+        f.close()
+
 pygame.init()
 white=(255,255,255)
 black=(0,0,0)
@@ -307,6 +333,8 @@ bw=bg.get_width()
 blist=[[50,310],[60,300],[70,290],[80,280],[90,270],[100,260],[110,250],[120,240],[130,230],[140,220],[150,210],[160,200],[170,190],[180,180],
        [190,170],[200,160],[210,150],[220,140],[230,130],[240,120],[250,110],[260,100],[270,90],[280,80]
        ,[290,70],[300,60],[310,50]] #Height of Top and Bottom Pipe [Top,Bottom]
+highest_score = read_score()
+
 
 def main():
     g=Game()
