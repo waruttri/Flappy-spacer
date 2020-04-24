@@ -11,7 +11,7 @@ class Bird(pygame.sprite.Sprite):
    def __init__(self,game):
       super().__init__()
       self.image=pimg[0] #Initial Start Picture
-      self.image=pygame.transform.scale(self.image,(100,85)) #Re-scale picture ==> 100x85
+      self.image=pygame.transform.scale(self.image,(150,85)) #Re-scale picture ==> 100x85
       self.rect=self.image.get_rect()
       self.vel=vec(0,0)
       self.rect.center=(dw/2,dh/2) #Start at the centor of display
@@ -27,12 +27,12 @@ class Bird(pygame.sprite.Sprite):
          if self.fc+1<28: #Update location of the player
             self.fc+=1
             self.image=pimg[self.fc//7]
-            self.image=pygame.transform.scale(self.image,(100,85))
+            self.image=pygame.transform.scale(self.image,(150,85))
          else:
             self.fc=0
       else:
          self.image=pimg[0]
-         self.image=pygame.transform.scale(self.image,(100,85))
+         self.image=pygame.transform.scale(self.image,(150,85))
       self.vel+=self.acc
       self.pos+=self.vel+0.5*self.acc
       if self.pos.y<=0+self.rect.width/2:
@@ -98,7 +98,7 @@ class Game: # The Game
       self.score=0
       self.gover=0
    def msg(self,text,x,y,color,size): #Message in Game
-      self.font=pygame.font.SysFont('georgia',size,bold=1)
+      self.font=pygame.font.SysFont('Kristen ITC',size,bold=1)
       msgtxt=self.font.render(text,1,color)
       msgrect=msgtxt.get_rect()
       msgrect.center=x/2,y/2
@@ -127,7 +127,7 @@ class Game: # The Game
                if event.key==pygame.K_RETURN:
                   wait=0
          self.msg("Game Over",dw-250,dh-100,red,40)
-            if(self.score>int(highest_score)):
+         if(self.score>int(highest_score)):
                 highest_score = self.score
                 record_score()
          self.msg("Press Enter to Play Again",dw-450,dh+200,white,30)
@@ -328,6 +328,8 @@ black=(0,0,0)
 red=(255,0,0)
 green=(0,255,0)
 blue=(0,0,255)
+lightblue=(0,168,243)
+violet=(144,61,186)
 dw=600 #Width of Screen
 dh=476 #Height of Screen
 screen=pygame.display.set_mode([dw,dh]) #Pygame Display
