@@ -234,6 +234,37 @@ def take_picture_cv():
             camera_on = False
     cam.release()
     cv2.destroyAllWindows()
+    removebg("{}\{}".format(current_path,"face_img.png"))
+    paste()
+
+def removebg(image_path):
+    current_path = pathlib.Path().absolute()
+    response = requests.post(
+        'https://api.remove.bg/v1.0/removebg',
+        files={'image_file': open(image_path, 'rb')},
+        data={'size': 'auto'},
+        headers={'X-Api-Key': 'tKkHoWkUdgDPmw6FonGnaEPm'},
+   )
+    if response.status_code == requests.codes.ok:
+        with open("{}\{}".format(current_path,'face_img_no_bg.png'), 'wb') as out:
+            out.write(response.content)
+    else:
+        print("Error:", response.status_code, response.text)
+
+def paste():
+    current_path = pathlib.Path().absolute()
+    spacer_path = "{}\{}".format(current_path,"template.png") #1120x558
+    face_path = "{}\{}".format(current_path,"face_img_no_bg.png")
+    image = Image.open(spacer_path)
+    face = Image.open(face_path)
+    resize_face = face.resize((225, 225))
+    resize_face=resize_face.rotate(-25)
+    for i in range(1,5):
+        image_copy = image.copy()
+        position = ((image_copy.width - resize_face.width - 250), (image_copy.height - resize_face.height - 250)) #position = ((645), (80))
+        image_copy.paste(resize_face, position, resize_face)
+        image_copy.paste(image, (0,0), image)
+        image_copy.save("{}\{}".format(current_path,"{}.png".format(i)))
 
 pygame.init()
 white=(255,255,255)
@@ -259,6 +290,7 @@ def main():
     while g.run:
         g.new()
         g.run()
-        
+
 game_intro()
+take_picture_cv()
 main()
