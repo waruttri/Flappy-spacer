@@ -5,26 +5,26 @@ black=(0,0,0)
 red=(255,0,0)
 green=(0,255,0)
 blue=(0,0,255)
-dw=600
-dh=476
-screen=pygame.display.set_mode([dw,dh])
+dw=600 #Width of Screen
+dh=476 #Height of Screen
+screen=pygame.display.set_mode([dw,dh]) #Pygame Display
 pygame.display.set_caption('Flappy Bird')
 pimg=[pygame.image.load(str(i)+'.png') for i in range(1,5)]
 clock=pygame.time.Clock()
 vec=pygame.math.Vector2
-bg=pygame.image.load('bg.png')
+bg=pygame.image.load('bg.png') #Load Background Pigture
 bw=bg.get_width()
 blist=[[50,310],[60,300],[70,290],[80,280],[90,270],[100,260],[110,250],[120,240],[130,230],[140,220],[150,210],[160,200],[170,190],[180,180],
        [190,170],[200,160],[210,150],[220,140],[230,130],[240,120],[250,110],[260,100],[270,90],[280,80]
-       ,[290,70],[300,60],[310,50]]
+       ,[290,70],[300,60],[310,50]] #Height of Top and Bottom Pipe [Top,Bottom]
 class Bird(pygame.sprite.Sprite):
    def __init__(self,game):
       super().__init__()
-      self.image=pimg[0]
-      self.image=pygame.transform.scale(self.image,(100,85))
+      self.image=pimg[0] #Initial Start Picture
+      self.image=pygame.transform.scale(self.image,(100,85)) #Re-scale picture ==> 100x85
       self.rect=self.image.get_rect()
       self.vel=vec(0,0)
-      self.rect.center=(dw/2,dh/2)
+      self.rect.center=(dw/2,dh/2) #Start at the centor of display
       self.acc=vec(0,0)
       self.pos=vec(self.rect.center)
       self.fc=0
@@ -32,9 +32,9 @@ class Bird(pygame.sprite.Sprite):
       self.acc=vec(0,1.5)
       self.vel=vec(0,0)
       keys=pygame.key.get_pressed()
-      if keys[pygame.K_SPACE]:
+      if keys[pygame.K_SPACE]: #Press Space Bar ==> Up
          self.acc.y=-1.5
-         if self.fc+1<28:
+         if self.fc+1<28: #Update location of the player
             self.fc+=1
             self.image=pimg[self.fc//7]
             self.image=pygame.transform.scale(self.image,(100,85))
@@ -51,17 +51,17 @@ class Bird(pygame.sprite.Sprite):
          self.pos.y=dh-self.rect.width/2
       self.rect.center=self.pos
       self.mask=pygame.mask.from_surface(self.image)
-class TBlock(pygame.sprite.Sprite):
+class TBlock(pygame.sprite.Sprite): #Generate Top Pipe
    def __init__(self,x,h1):
       super().__init__()
-      self.image=pygame.image.load('tp.png')
-      self.image=pygame.transform.scale(self.image,(80,h1))
+      self.image=pygame.image.load('tp.png') #Load tp.png as Top Pipe
+      self.image=pygame.transform.scale(self.image,(80,h1)) #Re-scale of the pipe 
       self.rect=self.image.get_rect()
       self.rect.x,self.rect.y=x,0
    def update(self):
       self.rect.x-=2
       self.mask1=pygame.mask.from_surface(self.image)
-class BBlock(pygame.sprite.Sprite):
+class BBlock(pygame.sprite.Sprite): #Genertate Bottom Pipe
    def __init__(self,x,h2):
       super().__init__()
       self.image=pygame.image.load('bp.png')
@@ -71,7 +71,7 @@ class BBlock(pygame.sprite.Sprite):
    def update(self):
       self.rect.x-=2
       self.mask2=pygame.mask.from_surface(self.image)
-class Game:
+class Game: # The Game
    def __init__(self):
       self.bgx=0
       self.x=650
@@ -82,7 +82,7 @@ class Game:
       self.last=pygame.time.get_ticks()
    def blockgen(self):
       x=random.randint(620,650)
-      h=random.choice(blist)
+      h=random.choice(blist) #Random Height of the Pipe during Game Play
       h1=h[0]
       h2=h[1]
       self.tblock=TBlock(x,h1)
@@ -93,7 +93,7 @@ class Game:
       self.bblocks=pygame.sprite.Group()
       self.bblocks.add(self.bblock)
       self.all_sprites.add(self.bblock)
-   def new(self):
+   def new(self): #Setting Up - New Game
       self.bird=Bird(self)
       self.all_sprites=pygame.sprite.Group()
       self.all_sprites.add(self.bird)
@@ -107,25 +107,25 @@ class Game:
       self.all_sprites.add(self.bblock)
       self.score=0
       self.gover=0
-   def msg(self,text,x,y,color,size):
+   def msg(self,text,x,y,color,size): #Message in Game
       self.font=pygame.font.SysFont('georgia',size,bold=1)
       msgtxt=self.font.render(text,1,color)
       msgrect=msgtxt.get_rect()
       msgrect.center=x/2,y/2
       screen.blit(msgtxt,(msgrect.center))
-   def pause(self):
+   def pause(self): # Pause Game
       wait=1
       while wait:
          for event in pygame.event.get():
-            if event.type==pygame.QUIT:
+            if event.type==pygame.QUIT: #Press ESC or Close Icon
                pygame.quit()
                quit()
             if event.type==pygame.KEYDOWN:
-               if event.key==pygame.K_RETURN:
+               if event.key==pygame.K_RETURN: #Press Enter
                   wait=0
          self.msg("Paused",dw-100,dh-100,blue,40)
          pygame.display.flip()
-   def over(self):
+   def over(self): #Game Over
       wait=1
       self.gover=1
       while wait:
@@ -139,11 +139,11 @@ class Game:
          self.msg("Gameover",dw-150,dh-100,red,40)
          self.msg("Press Enter to Play Again",dw-545,dh+200,red,40)
          pygame.display.flip()
-      self.new()
+      self.new()# Setting Up New Game
    def scores(self):
          self.msg("Score:"+str(self.score),dw-130,200,green,30)
       
-   def update(self):
+   def update(self):#During Game Play
      self.all_sprites.update()
      now=pygame.time.get_ticks()
      hits1=pygame.sprite.spritecollide(self.bird,self.bblocks,False,pygame.sprite.collide_mask)
