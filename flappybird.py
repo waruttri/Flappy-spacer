@@ -334,8 +334,8 @@ violet=(144,61,186)
 dw=600 #Width of Screen
 dh=476 #Height of Screen
 screen=pygame.display.set_mode([dw,dh]) #Pygame Display
-pygame.display.set_caption('Flappy Bird')
-pimg=[pygame.image.load(str(i)+'.png') for i in range(1,5)]
+pygame.display.set_caption('Flappy Spacer')
+#pimg=[pygame.image.load(str(i)+'.png') for i in range(1,5)]
 clock=pygame.time.Clock()
 vec=pygame.math.Vector2
 bg=pygame.image.load('bg.png') #Load Background Pigture
@@ -354,5 +354,6 @@ def main():
 
 game_intro()
 take_picture_cv()
+pimg=[pygame.image.load(str(i)+'.png') for i in range(1,5)] #Load Picture
 spacer()
 main()
