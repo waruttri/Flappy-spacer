@@ -116,6 +116,7 @@ class Game: # The Game
          self.msg("Paused",dw-100,dh-100,blue,40)
          pygame.display.flip()
    def over(self): #Game Over
+      global highest_score
       wait=1
       self.gover=1
       while wait:
