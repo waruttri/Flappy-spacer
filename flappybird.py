@@ -1,4 +1,11 @@
 import pygame,random
+from PIL import Image
+import requests
+import cv2
+import numpy as np
+import sys
+import pathlib
+import os
 
 class Bird(pygame.sprite.Sprite):
    def __init__(self,game):
