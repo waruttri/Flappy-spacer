@@ -200,6 +200,41 @@ def game_intro():
         pygame.display.update()
         clock.tick(15)
 
+def take_picture_cv():
+    current_path = pathlib.Path().absolute()
+    cascPath = "{}\{}".format(current_path,"haarcascade_frontalface_default.xml")
+    faceCascade = cv2.CascadeClassifier(cascPath)
+    cam = cv2.VideoCapture(0)
+    cv2.namedWindow("Press SPACE to take a photo")
+    camera_on = True
+    while camera_on: 
+        # Capture frame-by-frame
+        ret, frame = cam.read()  
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = faceCascade.detectMultiScale(gray,scaleFactor=1.1,minNeighbors=5,minSize=(30, 30))
+        # Draw a rectangle around the faces
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        cv2.imshow("Let 's take a photo", frame)
+        if not ret:
+            break
+        k = cv2.waitKey(1)
+        if k%256 == 27: #ESC pressed
+            break
+        elif k%256 == 32: #SPACE pressed
+            img_name = "opencv_frame_0.png"
+            cv2.imwrite(img_name, frame)
+            image = cv2.imread("opencv_frame_0.png")
+            clone = image.copy()
+            image = clone.copy()
+            crop_img = image[y+2:y+h-1, x+2:x+w-1]
+            cv2.imshow("crop_img", crop_img)
+            cv2.imwrite("{}\{}".format(current_path,"face_img.png"), crop_img)
+            #cv2.waitKey(0)
+            camera_on = False
+    cam.release()
+    cv2.destroyAllWindows()
+
 pygame.init()
 white=(255,255,255)
 black=(0,0,0)
