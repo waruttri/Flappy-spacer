@@ -1,22 +1,5 @@
 import pygame,random
-pygame.init()
-white=(255,255,255)
-black=(0,0,0)
-red=(255,0,0)
-green=(0,255,0)
-blue=(0,0,255)
-dw=600 #Width of Screen
-dh=476 #Height of Screen
-screen=pygame.display.set_mode([dw,dh]) #Pygame Display
-pygame.display.set_caption('Flappy Bird')
-pimg=[pygame.image.load(str(i)+'.png') for i in range(1,5)]
-clock=pygame.time.Clock()
-vec=pygame.math.Vector2
-bg=pygame.image.load('bg.png') #Load Background Pigture
-bw=bg.get_width()
-blist=[[50,310],[60,300],[70,290],[80,280],[90,270],[100,260],[110,250],[120,240],[130,230],[140,220],[150,210],[160,200],[170,190],[180,180],
-       [190,170],[200,160],[210,150],[220,140],[230,130],[240,120],[250,110],[260,100],[270,90],[280,80]
-       ,[290,70],[300,60],[310,50]] #Height of Top and Bottom Pipe [Top,Bottom]
+
 class Bird(pygame.sprite.Sprite):
    def __init__(self,game):
       super().__init__()
@@ -182,7 +165,30 @@ class Game: # The Game
          self.update()
          self.draw()
          pygame.display.flip()
-g=Game()
-while g.run:
-   g.new()
-   g.run()
+
+pygame.init()
+white=(255,255,255)
+black=(0,0,0)
+red=(255,0,0)
+green=(0,255,0)
+blue=(0,0,255)
+dw=600 #Width of Screen
+dh=476 #Height of Screen
+screen=pygame.display.set_mode([dw,dh]) #Pygame Display
+pygame.display.set_caption('Flappy Bird')
+pimg=[pygame.image.load(str(i)+'.png') for i in range(1,5)]
+clock=pygame.time.Clock()
+vec=pygame.math.Vector2
+bg=pygame.image.load('bg.png') #Load Background Pigture
+bw=bg.get_width()
+blist=[[50,310],[60,300],[70,290],[80,280],[90,270],[100,260],[110,250],[120,240],[130,230],[140,220],[150,210],[160,200],[170,190],[180,180],
+       [190,170],[200,160],[210,150],[220,140],[230,130],[240,120],[250,110],[260,100],[270,90],[280,80]
+       ,[290,70],[300,60],[310,50]] #Height of Top and Bottom Pipe [Top,Bottom]
+
+def main():
+    g=Game()
+    while g.run:
+        g.new()
+        g.run()
+
+main()
