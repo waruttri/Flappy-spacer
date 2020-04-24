@@ -166,6 +166,40 @@ class Game: # The Game
          self.draw()
          pygame.display.flip()
 
+def text_objects(text, font):
+    textSurface = font.render(text, True, violet)
+    return textSurface, textSurface.get_rect()
+
+def text_objects2(text, font):
+    textSurface2 = font.render(text, True, lightblue)
+    return textSurface2, textSurface2.get_rect()
+
+def game_opening():
+    pass
+
+def game_intro():
+    intro = True
+    img = pygame.image.load("intro.png")
+    gameDisplay = pygame.display.set_mode((dw,dh))
+    while intro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key==pygame.K_SPACE:
+                    intro = False
+        gameDisplay.blit(img,(0,0))
+        largeText = pygame.font.SysFont('Kristen ITC',48)
+        TextSurf, TextRect = text_objects("Flappy Spacer", largeText)
+        TextRect.center = ((dw/2),(dh*7/8))
+        TextSurf2, TextRect2 = text_objects2('Press "Space" Button', largeText)
+        TextRect2.center = ((dw/2),(dh/4))
+        gameDisplay.blit(TextSurf, TextRect)
+        gameDisplay.blit(TextSurf2, TextRect2)
+        pygame.display.update()
+        clock.tick(15)
+
 pygame.init()
 white=(255,255,255)
 black=(0,0,0)
@@ -190,5 +224,6 @@ def main():
     while g.run:
         g.new()
         g.run()
-
+        
+game_intro()
 main()
